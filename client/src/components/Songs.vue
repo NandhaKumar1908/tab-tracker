@@ -77,7 +77,6 @@ export default {
   },
   async mounted () {
     this.songs = (await SongsService.index()).data
-    console.log('songs', this.songs)
   }
 }
 </script>
