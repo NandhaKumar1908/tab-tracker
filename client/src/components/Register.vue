@@ -10,10 +10,11 @@
        <br>
        <v-text-field
          label="Password"
+         type="password"
          v-model="password"
        ></v-text-field>
        <br>
-       <div class="error" v-html="error" />
+       <div class="error-msg" v-html="error" />
        <br>
        <v-btn class="cyan" @click="register" dark>Register</v-btn>
       </form>
@@ -23,7 +24,6 @@
 </template>
 
 <script>
-import Panel from '@/components/Panel'
 import AuthenticationService from '@/services/AuthenticationService'
 export default {
   data () {
@@ -32,9 +32,6 @@ export default {
       password: '',
       error: null
     }
-  },
-  components: {
-    Panel
   },
   methods: {
     async register () {
@@ -45,6 +42,9 @@ export default {
         })
         this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setUser', response.data.user)
+        this.$router.push({
+          name: 'songs'
+        })
       } catch (error) {
         this.error = error.response.data.error
       }
@@ -55,7 +55,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.error{
+.error-msg{
   color: red;
 }
 </style>

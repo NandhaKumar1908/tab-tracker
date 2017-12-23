@@ -1,25 +1,23 @@
 <template>
- <v-layout column>
-    <v-flex xs6 offset-xs3>
-      <panel title="Songs">
-         <v-btn 
-            slot="action"
-            class= "cyan accent-3"
-            @click="navigateTo({name: 'songs-create'})"
-            light
-            small 
-            absolute
-            right
-            middle
-            fab>
-           <v-icon> add </v-icon>
-          </v-btn>
-         <div 
-            class= "song"
-            v-for="song in songs"
-            :key="song.id">
+  <panel title="Songs">
+    <v-btn 
+       slot="action"
+       class= "cyan accent-3"
+       :to="{name: 'songs-create'}"
+       light
+       small 
+       absolute
+       right
+       middle
+       fab>
+    <v-icon> add </v-icon>
+    </v-btn>
+    <div 
+       class= "song"
+       v-for="song in songs"
+       :key="song.id">
 
-          <v-layout>
+        <v-layout>
 
             <v-flex xs6 >
 
@@ -38,45 +36,39 @@
                <v-btn 
                  class="cyan" 
                  dark
-                 @click="navigateTo({
+                 :to="{
                     name: 'song',
                     params: {
                       songId: song.id
                    }
-                 })"
+                 }"
                >View</v-btn>
             </v-flex>
 
             <v-flex xs6 >
               <img class="album-image" :src="song.albumImageUrl"/>
             </v-flex>
-          </v-layout>         
+         </v-layout>         
           
-         </div>
-      </panel>
-    </v-flex>
- </v-layout>
+    </div>
+  </panel>
 </template>
 
 <<script>
-import Panel from '@/components/Panel'
 import SongsService from '@/services/SongsService'
 export default {
-  components: {
-    Panel
-  },
-  methods: {
-    navigateTo (route) {
-      this.$router.push(route)
-    }
-  },
   data () {
     return {
       songs: null
     }
   },
-  async mounted () {
-    this.songs = (await SongsService.index()).data
+  watch: {
+    '$route.query.search': {
+      immediate: true,
+      async handler (value) {
+        this.songs = (await SongsService.index(value)).data
+      }
+    }
   }
 }
 </script>
